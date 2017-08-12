@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body onload="cron()">
+    <div>
+        当前价格:<span id="nowPrice">0<br>
+        </div>
+        
+    <div>
+            涨幅:<span id = "zhangfu">0<br>
+        </div>
+        
+    
+    
+    <div>
+        <span id = "date">日期：</span>
+    </div>
+    </span>
+
+</body>
+
+
+<script>
+    function cron() {
+        setInterval("foo()", 5000)
+    }
+
+    function foo() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                let res = xmlhttp.responseText;
+                res = JSON.parse(res)
+                document.getElementById('nowPrice').innerHTML = res.ticker.last;
+                document.getElementById('zhangfu').innerHTML = ((res.ticker.last - res.ticker.open) / res.ticker.open * 100 * 100) / 100 + "%";
+                document.getElementById('date').innerHTML = Date().toLocaleString();
+            }
+        }
+        xmlhttp.open("GET", "https://api.huobi.com/staticmarket/ticker_btc_json.js", true);
+        xmlhttp.send();
+
+
+    }
+</script>
+
+</html>
